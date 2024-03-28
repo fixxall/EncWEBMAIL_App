@@ -16,12 +16,15 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING
         },
+        passphraseHash: {
+            type: Sequelize.TEXT,
+        },
         publicKeyPath: {
             type: Sequelize.STRING
         },
-        privateKeyPath: {
-            type: Sequelize.STRING
-        },
+        // privateKeyPath: {
+        //     type: Sequelize.STRING
+        // },
     });
 
     return User;

@@ -19,7 +19,7 @@ module.exports = function(app) {
         body('message').isString(),
         body('type').isString(),
         body('encKey').isString(),
-        body('passhraseHash').isString(),
+        body('fileHash').isString(),
         body('attachmentId').isString(),
     ], controller.createMessage);
 

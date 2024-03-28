@@ -16,4 +16,14 @@ module.exports = function(app) {
         body('password').isLength({ min: 1 }),
     ], controller.signin);
 
+    app.post("/api/auth/changepassphrase", [
+        authJwt.verifyToken,
+        body('newPassphrase').isString({ min: 1 }),
+    ], controller.changePassphrase);
+
+    app.post("/api/auth/checkpassphrase", [
+        authJwt.verifyToken,
+        body('passphrase').isString({ min: 1 }),
+    ], controller.checkPassphrase);
+
 };

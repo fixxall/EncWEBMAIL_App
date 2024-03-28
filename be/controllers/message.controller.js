@@ -21,7 +21,7 @@ exports.createMessage = (req, res) => {
                 sender: users.email,
                 message: req.body.message,
                 type: req.body.type,
-                passhraseHash: req.body.passhraseHash,
+                fileHash: req.body.fileHash,
                 encKey: req.body.encKey,
 
             }).then((message) => {
@@ -102,7 +102,7 @@ exports.messageDraftGet = (req, res) => {
                         files: FileList,
                         sender: element.sender,
                         encKey: element.encKey,
-                        passhraseHash: element.passhraseHash,
+                        fileHash: element.fileHash,
                         receiver: element.receiver,
                         message: element.message,
                         type: element.type,
@@ -161,7 +161,7 @@ exports.messageSentsGet = (req, res) => {
                         files: FileList,
                         sender: element.sender,
                         encKey: element.encKey,
-                        passhraseHash: element.passhraseHash,
+                        fileHash: element.fileHash,
                         receiver: element.receiver,
                         message: element.message,
                         type: element.type,

@@ -60,8 +60,8 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
         return result;
     }
 
-    const encryptingContent = async(content: File, passphrase: string, secretKey: string) => {
-        const key = hashString(secretKey+passphrase);
+    const encryptingContent = async(content: File, secretKey: string) => {
+        const key = hashString(secretKey);
         const inputBuffer = await content.arrayBuffer();
         var wordArray = CryptoJS.lib.WordArray.create(inputBuffer);
         var encrypted = CryptoJS.AES.encrypt(wordArray, key);
@@ -72,9 +72,15 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
         return encFile;
 
     }
-
+    
     const hashString = (s: string) => {
         var hash = CryptoJS.SHA256(s);
+        return hash.toString(CryptoJS.enc.Base64)
+    }
+    const hashFile = async(content: File) => {
+        const inputBuffer = await content.arrayBuffer();
+        var wordArray = CryptoJS.lib.WordArray.create(inputBuffer);
+        var hash = CryptoJS.SHA256(wordArray);
         return hash.toString(CryptoJS.enc.Base64)
     }
 
@@ -89,6 +95,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
         if(messageType === 'biasa'){
             formData.append("file", attachment);
             formData.append("name", attachment.name);
+            const fileHash = await hashFile(attachment);
             axios.post(listOfUrl.uploadAttachment, formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -96,13 +103,14 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
                 },
                 }).then(response => {
                     const attachmentId = response.data.id;
-                    postCreateMessage(attachmentId.toString());
+                    postCreateMessage(attachmentId.toString(), fileHash);
                 }).catch(err => {
             
                 });
         }
         else{
-            const encFile: File = await encryptingContent(attachment, passphrase, secretKey);
+            const encFile: File = await encryptingContent(attachment, secretKey);
+            const fileHash = await hashFile(attachment);
             formData.append("file", encFile);
             formData.append("name", encFile.name);
             axios.post(listOfUrl.uploadAttachment, formData,{
@@ -112,20 +120,20 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
                 },
                 }).then(response => {
                     const attachmentId = response.data.id;
-                    postCreateMessage(attachmentId.toString());
+                    postCreateMessage(attachmentId.toString(), fileHash);
                 }).catch(err => {
             
                 });
         }
     }
   }
-    const postCreateMessage = (attachmentId: string) => {
+    const postCreateMessage = (attachmentId: string, fileHash: string) => {
         const jsonData = {
             receiver:receiverEmail,
             message:message,
             type:messageType,
             attachmentId: attachmentId,
-            passhraseHash: hashString(passphrase),
+            fileHash: fileHash,
             encKey: encryptingKey(secretKey),
         };
         axios.post(listOfUrl.createMessage, jsonData, {
@@ -160,7 +168,6 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
     const handleSendMessage = ()=>{
         getPublicKey(receiverEmail);
         if(attachment){
-            encryptingContent(attachment, "secret", "secret");
             postUploadFile();
         }
     }
@@ -217,7 +224,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
                 </Select>
                 </FormControl>
                 <>
-                {messageType!=='biasa'?
+                {/* {messageType!=='biasa'?
                     <TextField
                     label="passphrase"
                     variant="outlined"
@@ -225,7 +232,7 @@ const CreateMessage: React.FC<CreateMessageProps> = ({}) => {
                     fullWidth
                     value={passphrase}
                     onChange={(e) => setPassphrase(e.target.value)}
-                    />:<></>}
+                    />:<></>} */}
                 </>
                 <Button
                 variant="contained"

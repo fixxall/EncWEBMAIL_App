@@ -22,7 +22,7 @@ const appRoutes: RouteType[] = [
     element: <DashboardPageLayout />,
     state: "sents",
     sidebarProps: {
-      displayText: "Sents",
+      displayText: "Profiles",
       icon: <UnarchiveIcon />
     }
   },

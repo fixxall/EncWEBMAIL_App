@@ -5,6 +5,8 @@ const link_api = 'http://'+APIHOST+':'+APIPORT
 const listOfUrl = {
   base: link_api,
   login: link_api+'/api/auth/signin',
+  changePassphrase: link_api+'/api/auth/changepassphrase',
+  checkPassphrase: link_api+'/api/auth/checkpassphrase',
   createMessage: link_api+'/api/message/create',
   uploadAttachment: link_api+'/api/message/attachment/new',
   deleteMessage: link_api+'/api/message/delete',

@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
         type: {
             type: Sequelize.STRING,
         },
-        passhraseHash: {
+        fileHash: {
             type: Sequelize.TEXT,
         },
         encKey: {
