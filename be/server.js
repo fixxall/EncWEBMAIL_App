@@ -18,10 +18,10 @@ const db = require("./models");
 const User = db.user;
 var bcrypt = require("bcryptjs");
 
-db.sequelize.sync().then(() => {
-    // db.sequelize.sync({ force: true }).then(() => {
+// db.sequelize.sync().then(() => {
+    db.sequelize.sync({ force: true }).then(() => {
     // Uncommand this function if firstime running
-    // initial();
+    initial();
 }).catch(err => {
     console.log(err.message);
 });
